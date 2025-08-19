@@ -1,4 +1,7 @@
 package demo.backend.tuto.demo.service;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import demo.backend.tuto.demo.domain.User;
@@ -19,5 +22,28 @@ public class UserSevice {
 
     public void handleDeleteUser(long id) {
         this.userRepository.deleteById(id);
+    }
+
+    public User handleGetUser(long id) {
+        Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        }
+        return null;
+    }
+
+    public List<User> handleGetAllUsers() {
+        return this.userRepository.findAll();
+    }
+
+    public User handleUpdateUser(User user) {
+        User currentUser = this.handleGetUser(user.getId());
+        if (currentUser != null) {
+            currentUser.setName(user.getName());
+            currentUser.setEmail(user.getEmail());
+            currentUser.setPassword(user.getPassword());
+            currentUser = this.userRepository.save(currentUser);
+        }
+        return currentUser;
     }
 }
