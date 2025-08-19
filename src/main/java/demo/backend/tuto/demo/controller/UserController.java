@@ -1,6 +1,8 @@
 package demo.backend.tuto.demo.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.backend.tuto.demo.domain.User;
@@ -15,14 +17,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users/create")
-    public String createNewUser() {
-
-        User user = new User();
-        user.setName("John Doe");
-        user.setEmail("john.doe@example.com");
-        user.setPassword("password123");
-        this.userService.handleCreateUser(user);
-        return "User created successfully";
+    @PostMapping("/users/create")
+    public User createNewUser(@RequestBody User requestUser) {
+        User newUser = this.userService.handleCreateUser(requestUser);
+        return newUser;
     }
 }
