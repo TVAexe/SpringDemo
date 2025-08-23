@@ -8,11 +8,11 @@ import demo.backend.tuto.demo.domain.User;
 import demo.backend.tuto.demo.repository.UserRepository;
 
 @Service
-public class UserSevice {
+public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserSevice(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -39,11 +39,15 @@ public class UserSevice {
     public User handleUpdateUser(User user) {
         User currentUser = this.handleGetUser(user.getId());
         if (currentUser != null) {
-            currentUser.setName(user.getName());
+            currentUser.setUsername(user.getUsername());
             currentUser.setEmail(user.getEmail());
             currentUser.setPassword(user.getPassword());
             currentUser = this.userRepository.save(currentUser);
         }
         return currentUser;
+    }
+
+    public User findUserByUsername(String username) {
+        return this.userRepository.findByEmail(username);
     }
 }

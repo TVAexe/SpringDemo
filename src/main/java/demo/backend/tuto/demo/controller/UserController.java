@@ -2,26 +2,31 @@ package demo.backend.tuto.demo.controller;
 
 import java.util.List;
 
-import demo.backend.tuto.demo.service.exception.IdInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import demo.backend.tuto.demo.domain.User;
-import demo.backend.tuto.demo.service.UserSevice;
+import demo.backend.tuto.demo.service.UserService;
+import demo.backend.tuto.demo.utils.exception.IdInvalidException;
 
 
 @RestController
 public class UserController {
 
-    private final UserSevice userService;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserSevice userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/users")
     public ResponseEntity<User> createNewUser(@RequestBody User requestUser) {
+        String hashedPassword = this.passwordEncoder.encode(requestUser.getPassword());
+        requestUser.setPassword(hashedPassword);
         User newUser = this.userService.handleCreateUser(requestUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }

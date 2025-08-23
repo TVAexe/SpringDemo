@@ -7,6 +7,8 @@ import demo.backend.tuto.demo.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    User findByEmail(String username);
     // Additional query methods can be defined here if needed
     
 }

@@ -20,7 +20,7 @@ public class User {
 
     @Getter
     @Setter
-    private String name;
+    private String username;
 
     @Getter
     @Setter
