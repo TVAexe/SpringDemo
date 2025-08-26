@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.Column;
@@ -21,12 +22,15 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Ten cong ty khong duoc bo trong")
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
 
     private String address;
+
+    private String logo;
 
     private Instant createdAt;
 
