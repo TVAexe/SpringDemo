@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                 //     .authenticationEntryPoint(customAuthenticationEntryPoint)
                 //     .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
                 .formLogin(f -> f.disable())
+                .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
