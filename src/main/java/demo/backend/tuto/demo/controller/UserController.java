@@ -17,6 +17,7 @@ import demo.backend.tuto.demo.utils.exception.IdInvalidException;
 
 
 @RestController
+@RequestMapping("/api/v1")
 public class UserController {
 
     private final UserService userService;

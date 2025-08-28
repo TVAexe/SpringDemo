@@ -10,24 +10,18 @@ import lombok.Getter;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
+    
     private Long id;
-
-    @Getter
-    @Setter
     private String username;
-
-    @Getter
-    @Setter
     private String email;
-
-    @Getter
-    @Setter
     private String password;
+
+    
 
 }
