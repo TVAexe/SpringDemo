@@ -2,9 +2,15 @@ package demo.backend.tuto.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import demo.backend.tuto.demo.domain.Company;
 import demo.backend.tuto.demo.domain.User;
+import demo.backend.tuto.demo.domain.DTO.Meta;
+import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
 import demo.backend.tuto.demo.repository.UserRepository;
 
 @Service
@@ -32,8 +38,17 @@ public class UserService {
         return null;
     }
 
-    public List<User> handleGetAllUsers() {
-        return this.userRepository.findAll();
+    public ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
+        Page<User> pageUser = this.userRepository.findAll(spec, pageable);
+        ResultPaginationDTO result = new ResultPaginationDTO();
+        Meta meta = new Meta();
+        meta.setPage(pageUser.getNumber() + 1);
+        meta.setPageSize(pageUser.getSize());
+        meta.setPages(pageUser.getTotalPages());
+        meta.setTotal(pageUser.getTotalElements());
+        result.setMeta(meta);
+        result.setResult(pageUser.getContent());
+        return result;
     }
 
     public User handleUpdateUser(User user) {

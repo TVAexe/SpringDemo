@@ -1,13 +1,17 @@
 package demo.backend.tuto.demo.controller;
 
-import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.turkraft.springfilter.boot.Filter;
+
 import demo.backend.tuto.demo.domain.User;
+import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
 import demo.backend.tuto.demo.service.UserService;
 import demo.backend.tuto.demo.utils.exception.IdInvalidException;
 
@@ -47,8 +51,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleGetAllUsers());
+    public ResponseEntity<ResultPaginationDTO> getAllUsers(@Filter Specification<User> filter, Pageable pageable ) {
+        return ResponseEntity.ok(this.userService.handleGetAllUsers(filter, pageable));
     }
 
     @PutMapping("users")

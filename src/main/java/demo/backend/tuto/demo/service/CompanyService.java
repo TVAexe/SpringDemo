@@ -1,17 +1,16 @@
 package demo.backend.tuto.demo.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import demo.backend.tuto.demo.domain.Company;
 import demo.backend.tuto.demo.domain.DTO.Meta;
 import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
 import demo.backend.tuto.demo.repository.CompanyRepository;
-import jakarta.validation.Valid;
 
 @Service
 public class CompanyService {
@@ -25,8 +24,8 @@ public class CompanyService {
         return this.companyRepository.save(company);
     }
 
-    public ResultPaginationDTO handleGetAllCompanies(Pageable pageable) {
-        Page<Company> pageCompany = this.companyRepository.findAll(pageable);
+    public ResultPaginationDTO handleGetAllCompanies(Specification<Company> spec, Pageable pageable) {
+        Page<Company> pageCompany = this.companyRepository.findAll(spec, pageable);
         ResultPaginationDTO result = new ResultPaginationDTO();
         Meta meta = new Meta();
         meta.setPage(pageCompany.getNumber() + 1);
