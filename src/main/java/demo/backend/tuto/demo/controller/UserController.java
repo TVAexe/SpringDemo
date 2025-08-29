@@ -1,6 +1,5 @@
 package demo.backend.tuto.demo.controller;
 
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -12,9 +11,13 @@ import com.turkraft.springfilter.boot.Filter;
 
 import demo.backend.tuto.demo.domain.User;
 import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
+import demo.backend.tuto.demo.domain.DTO.Users.CreatedUserDTO;
+import demo.backend.tuto.demo.domain.DTO.Users.FetchUserDTO;
+import demo.backend.tuto.demo.domain.DTO.Users.UpdateUserDTO;
 import demo.backend.tuto.demo.service.UserService;
+import demo.backend.tuto.demo.utils.annotation.ApiMessage;
 import demo.backend.tuto.demo.utils.exception.IdInvalidException;
-
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -29,40 +32,52 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createNewUser(@RequestBody User requestUser) {
+    @ApiMessage("Created new User")
+    public ResponseEntity<CreatedUserDTO> createNewUser(@Valid @RequestBody User requestUser)
+            throws IdInvalidException {
+        boolean isEmailExisted = this.userService.checkEmailExist(requestUser.getEmail());
+        if (isEmailExisted) {
+            throw new IdInvalidException("Email " + requestUser.getEmail() + " already exists");
+        }
+
         String hashedPassword = this.passwordEncoder.encode(requestUser.getPassword());
         requestUser.setPassword(hashedPassword);
         User newUser = this.userService.handleCreateUser(requestUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertUserDTO(newUser));
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
-        if (id>=1500) {
-            throw new IdInvalidException("Id khong lon hon 1500");
+    @ApiMessage("Deleted User")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
+        User currentUser = this.userService.handleGetUser(id);
+        if (currentUser == null) {
+            throw new IdInvalidException("User voi id: " + id + " khong ton tai");
         }
         this.userService.handleDeleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping("users/{id}")
-    public ResponseEntity<User> getAnUser(@PathVariable("id") long id) {
+    public ResponseEntity<FetchUserDTO> getAnUser(@PathVariable("id") long id) throws IdInvalidException {
         User fetchUser = this.userService.handleGetUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(fetchUser);
+        if (fetchUser == null) {
+            throw new IdInvalidException("User voi id: " + id + " khong ton tai");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.convertFetchUserDTO(fetchUser));
     }
 
     @GetMapping("/users")
-    public ResponseEntity<ResultPaginationDTO> getAllUsers(@Filter Specification<User> filter, Pageable pageable ) {
+    public ResponseEntity<ResultPaginationDTO> getAllUsers(@Filter Specification<User> filter, Pageable pageable) {
         return ResponseEntity.ok(this.userService.handleGetAllUsers(filter, pageable));
     }
 
     @PutMapping("users")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User updatedUser =  this.userService.handleUpdateUser(user);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<UpdateUserDTO> updateUser(@RequestBody User user) throws IdInvalidException {
+        User updatedUser = this.userService.handleUpdateUser(user);
+        if (updatedUser == null) {
+            throw new IdInvalidException("User voi id: " + user.getId() + " khong ton tai");
+        }
+        return ResponseEntity.ok(this.userService.convertUpdateUserDTO(updatedUser));
     }
-    
-    
-
 
 }
