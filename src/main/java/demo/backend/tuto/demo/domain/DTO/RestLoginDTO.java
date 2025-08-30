@@ -1,16 +1,25 @@
 package demo.backend.tuto.demo.domain.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class RestLoginDTO {
+
+    private String accessToken;
+    private UserLogin userLogin;
 
     @Getter
     @Setter
-    private String accessToken;
-
-    public RestLoginDTO(String accessToken) {
-        this.accessToken = accessToken;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserLogin {
+        private long id;
+        private String mail;
+        private String username;
     }
 
 }
