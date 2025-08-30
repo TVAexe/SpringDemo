@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import demo.backend.tuto.demo.utils.SecurityUtils;
 import demo.backend.tuto.demo.utils.constant.GenderEnum;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,6 +37,7 @@ public class User {
     private int age;
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String refreshToken;
     private Instant createdAt;
     private Instant updatedAt;

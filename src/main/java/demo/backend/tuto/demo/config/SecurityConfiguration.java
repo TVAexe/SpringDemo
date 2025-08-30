@@ -34,8 +34,8 @@ public class SecurityConfiguration {
     @Value("${demo.jwt.base64-secret}")
     private String jwtKey;
 
-    @Value("${demo.jwt.token-validity-in-seconds}")
-    private Long jwtTokenValidity;
+    @Value("${demo.jwt.access-token-validity-in-seconds}")
+    private Long jwtAccessTokenValidity;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -17,6 +17,9 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+
+import demo.backend.tuto.demo.domain.DTO.RestLoginDTO;
+
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.context.SecurityContext;
 
@@ -33,18 +36,35 @@ public class SecurityUtils {
     @Value("${demo.jwt.base64-secret}")
     private String jwtKey;
 
-    @Value("${demo.jwt.token-validity-in-seconds}")
-    private Long jwtTokenValidity;
+    @Value("${demo.jwt.access-token-validity-in-seconds}")
+    private Long jwtAccessTokenValidity;
 
-    public String createToken(Authentication authentication) {
+    @Value("${demo.jwt.refresh-token-validity-in-seconds}")
+    private Long jwtRefreshTokenValidity;
+
+    public String createAccessToken(Authentication authentication) {
         Instant now = Instant.now();
-        Instant validity = now.plus(this.jwtTokenValidity, ChronoUnit.SECONDS);
+        Instant validity = now.plus(this.jwtAccessTokenValidity, ChronoUnit.SECONDS);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                                             .issuedAt(now)
                                             .expiresAt(validity)
                                             .subject(authentication.getName())
                                             .claim("Hoi dan IT", authentication)
+                                            .build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+    }
+
+    public String createRefreshToken(String email, RestLoginDTO restLoginDTO) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(this.jwtRefreshTokenValidity, ChronoUnit.SECONDS);
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                                            .issuedAt(now)
+                                            .expiresAt(validity)
+                                            .subject(email)
+                                            .claim("user", restLoginDTO.getUserLogin())
                                             .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

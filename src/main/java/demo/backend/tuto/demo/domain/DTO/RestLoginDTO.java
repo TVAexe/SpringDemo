@@ -18,7 +18,7 @@ public class RestLoginDTO {
     @NoArgsConstructor
     public static class UserLogin {
         private long id;
-        private String mail;
+        private String email;
         private String username;
     }
 

@@ -117,4 +117,12 @@ public class UserService {
         return updateUserDTO;
     }
 
+    public void updateUserToken(String token, String email) {
+        User user = this.findUserByUsername(email);
+        if (user != null) {
+            user.setRefreshToken(token);
+            this.userRepository.save(user);
+        }
+    }
+
 }
