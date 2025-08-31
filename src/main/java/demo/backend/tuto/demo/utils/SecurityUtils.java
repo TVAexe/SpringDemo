@@ -2,7 +2,9 @@ package demo.backend.tuto.demo.utils;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -45,12 +47,16 @@ public class SecurityUtils {
     public String createAccessToken(Authentication authentication, RestLoginDTO.UserLogin userLogin) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.jwtAccessTokenValidity, ChronoUnit.SECONDS);
+        List<String> listAuthority = new ArrayList<String>();
+        listAuthority.add("ROLE_USER_UPDATE");
+        listAuthority.add("ROLE_USER_CREATE");
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                                             .issuedAt(now)
                                             .expiresAt(validity)
                                             .subject(authentication.getName())
                                             .claim("User", userLogin)
+                                            .claim("permission", listAuthority)
                                             .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
