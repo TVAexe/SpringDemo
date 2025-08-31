@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import demo.backend.tuto.demo.utils.SecurityUtils;
+import demo.backend.tuto.demo.utils.annotation.ApiMessage;
+
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,7 +43,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -48,17 +51,27 @@ public class AuthController {
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        String accessToken = this.securityUtils.createAccessToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         RestLoginDTO restLoginDTO = new RestLoginDTO();
         User userDB = userService.findUserByUsername(loginDTO.getUsername());
-        restLoginDTO.setAccessToken(accessToken);
         RestLoginDTO.UserLogin userLogin = new UserLogin(userDB.getId(), userDB.getEmail(), userDB.getUsername());
         restLoginDTO.setUserLogin(userLogin);
+        String accessToken = this.securityUtils.createAccessToken(authentication, restLoginDTO.getUserLogin());
+        restLoginDTO.setAccessToken(accessToken);
         String refreshToken = this.securityUtils.createRefreshToken(userDB.getEmail(), restLoginDTO);
         this.userService.updateUserToken(refreshToken, userDB.getEmail());
-        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken).httpOnly(true).secure(true).path("/").maxAge(jwtRefreshTokenValidity).build();
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken).httpOnly(true).secure(true)
+                .path("/").maxAge(jwtRefreshTokenValidity).build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).body(restLoginDTO);
+    }
+
+    @GetMapping("/auth/account")
+    @ApiMessage("Fetch account information")
+    public ResponseEntity<RestLoginDTO.UserLogin> getAccount() {
+        String email = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User userDB = userService.findUserByUsername(email);
+        RestLoginDTO.UserLogin userLogin = new UserLogin(userDB.getId(), userDB.getEmail(), userDB.getUsername());
+        return ResponseEntity.ok().body(userLogin);
     }
 
 }

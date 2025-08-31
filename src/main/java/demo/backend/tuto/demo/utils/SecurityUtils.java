@@ -42,7 +42,7 @@ public class SecurityUtils {
     @Value("${demo.jwt.refresh-token-validity-in-seconds}")
     private Long jwtRefreshTokenValidity;
 
-    public String createAccessToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication, RestLoginDTO.UserLogin userLogin) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.jwtAccessTokenValidity, ChronoUnit.SECONDS);
 
@@ -50,7 +50,7 @@ public class SecurityUtils {
                                             .issuedAt(now)
                                             .expiresAt(validity)
                                             .subject(authentication.getName())
-                                            .claim("Hoi dan IT", authentication)
+                                            .claim("User", userLogin)
                                             .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
