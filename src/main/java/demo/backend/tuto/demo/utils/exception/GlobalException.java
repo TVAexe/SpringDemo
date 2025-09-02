@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import demo.backend.tuto.demo.domain.RestResponse;
+import demo.backend.tuto.demo.domain.response.RestResponse;
 import jakarta.persistence.NoResultException;
 
 @RestControllerAdvice

@@ -1,4 +1,4 @@
-package demo.backend.tuto.demo.domain;
+package demo.backend.tuto.demo.domain.response;
 
 import lombok.Getter;
 import lombok.Setter;
