@@ -10,6 +10,6 @@ import demo.backend.tuto.demo.domain.User;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     User findByEmail(String username);
-    // Additional query methods can be defined here if needed
     boolean existsByEmail(String email);
+    User findByRefreshTokenAndEmail(String refreshToken, String email);
 }
