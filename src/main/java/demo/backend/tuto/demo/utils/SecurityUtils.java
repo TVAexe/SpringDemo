@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.nimbusds.jose.util.Base64;
 
-import demo.backend.tuto.demo.domain.DTO.RestLoginDTO;
+import demo.backend.tuto.demo.domain.response.RestLoginDTO;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.context.SecurityContext;

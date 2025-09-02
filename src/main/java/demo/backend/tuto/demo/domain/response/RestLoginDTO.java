@@ -1,4 +1,4 @@
-package demo.backend.tuto.demo.domain.DTO;
+package demo.backend.tuto.demo.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
