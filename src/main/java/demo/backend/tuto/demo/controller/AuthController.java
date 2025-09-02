@@ -3,7 +3,7 @@ package demo.backend.tuto.demo.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.backend.tuto.demo.domain.User;
-import demo.backend.tuto.demo.domain.DTO.LoginDTO;
+import demo.backend.tuto.demo.domain.DTO.ReqLoginDTO;
 import demo.backend.tuto.demo.domain.DTO.RestLoginDTO;
 import demo.backend.tuto.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -46,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<RestLoginDTO> login(@Valid @RequestBody ReqLoginDTO loginDTO) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDTO.getUsername(), loginDTO.getPassword());
