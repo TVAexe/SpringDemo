@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turkraft.springfilter.boot.Filter;
 
 import demo.backend.tuto.demo.domain.Company;
-import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
+import demo.backend.tuto.demo.domain.response.ResultPaginationDTO;
 import demo.backend.tuto.demo.service.CompanyService;
 import demo.backend.tuto.demo.utils.annotation.ApiMessage;
 import jakarta.validation.Valid;

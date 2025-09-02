@@ -10,9 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import demo.backend.tuto.demo.domain.User;
-import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
 import demo.backend.tuto.demo.domain.response.CreatedUserDTO;
 import demo.backend.tuto.demo.domain.response.FetchUserDTO;
+import demo.backend.tuto.demo.domain.response.ResultPaginationDTO;
 import demo.backend.tuto.demo.domain.response.UpdateUserDTO;
 import demo.backend.tuto.demo.repository.UserRepository;
 

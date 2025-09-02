@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import demo.backend.tuto.demo.domain.Company;
-import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
+import demo.backend.tuto.demo.domain.response.ResultPaginationDTO;
 import demo.backend.tuto.demo.repository.CompanyRepository;
 
 @Service
