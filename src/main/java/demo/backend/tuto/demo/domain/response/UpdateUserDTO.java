@@ -1,18 +1,14 @@
-package demo.backend.tuto.demo.domain.DTO.Users;
+package demo.backend.tuto.demo.domain.response;
 
 import java.time.Instant;
 
 import demo.backend.tuto.demo.utils.constant.GenderEnum;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class FetchUserDTO {
+public class UpdateUserDTO {
     private long id;
     private String name;
     private String email;
@@ -20,5 +16,4 @@ public class FetchUserDTO {
     private int age;
     private GenderEnum gender;
     private Instant updatedAt;
-    private Instant createdAt;
 }

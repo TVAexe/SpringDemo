@@ -1,4 +1,4 @@
-package demo.backend.tuto.demo.domain.DTO.Users;
+package demo.backend.tuto.demo.domain.response;
 
 import java.time.Instant;
 
