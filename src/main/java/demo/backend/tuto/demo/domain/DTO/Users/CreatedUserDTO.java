@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class CreatedUserDTO {
     private long id;
-    private String username;
+    private String name;
     private String email;
     private String address;
     private int age;

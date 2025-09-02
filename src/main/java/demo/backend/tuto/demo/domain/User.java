@@ -28,7 +28,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     
     private Long id;
-    private String username;
+    private String name;
     @NotBlank(message = "Email khong duoc de trong")
     private String email;
     @NotBlank(message = "Password khong duoc de trong")

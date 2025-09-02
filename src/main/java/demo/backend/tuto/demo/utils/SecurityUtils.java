@@ -50,7 +50,7 @@ public class SecurityUtils {
     @Value("${demo.jwt.refresh-token-validity-in-seconds}")
     private Long jwtRefreshTokenValidity;
 
-    public String createAccessToken(String email, RestLoginDTO.UserLogin userLogin) {
+    public String createAccessToken(String email, RestLoginDTO.UserLogin user) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.jwtAccessTokenValidity, ChronoUnit.SECONDS);
         List<String> listAuthority = new ArrayList<String>();
@@ -61,7 +61,7 @@ public class SecurityUtils {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("User", userLogin)
+                .claim("User", user)
                 .claim("permission", listAuthority)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -76,7 +76,7 @@ public class SecurityUtils {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", restLoginDTO.getUserLogin())
+                .claim("user", restLoginDTO.getUser())
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
@@ -173,7 +173,6 @@ public class SecurityUtils {
         try {
             return jwtDecoder.decode(refreshToken);
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println(">>> Refresh token error: " + e.getMessage());
             throw e;
 

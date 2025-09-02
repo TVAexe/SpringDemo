@@ -52,7 +52,7 @@ public class UserService {
         meta.setTotal(pageUser.getTotalElements());
         result.setMeta(meta);
         List<FetchUserDTO> fetchUserDTOs = pageUser.getContent().stream()
-                .map(item -> new FetchUserDTO(item.getId(), item.getEmail(), item.getUsername(), item.getAddress(),
+                .map(item -> new FetchUserDTO(item.getId(), item.getName(), item.getEmail(), item.getAddress(),
                         item.getAge(), item.getGender(), item.getUpdatedAt(), item.getCreatedAt()))
                 .collect(Collectors.toList());
         result.setResult(fetchUserDTOs);
@@ -62,7 +62,7 @@ public class UserService {
     public User handleUpdateUser(User user) {
         User currentUser = this.handleGetUser(user.getId());
         if (currentUser != null) {
-            currentUser.setUsername(user.getUsername());
+            currentUser.setName(user.getName());
             currentUser.setEmail(user.getEmail());
             currentUser.setAddress(user.getAddress());
             currentUser.setAge(user.getAge());
@@ -84,7 +84,7 @@ public class UserService {
         CreatedUserDTO createdUserDTO = new CreatedUserDTO();
         createdUserDTO.setId(newUser.getId());
         createdUserDTO.setEmail(newUser.getEmail());
-        createdUserDTO.setUsername(newUser.getUsername());
+        createdUserDTO.setName(newUser.getName());
         createdUserDTO.setAddress(newUser.getAddress());
         createdUserDTO.setAge(newUser.getAge());
         createdUserDTO.setGender(newUser.getGender());
@@ -96,7 +96,7 @@ public class UserService {
         FetchUserDTO fetchUserDTO = new FetchUserDTO();
         fetchUserDTO.setId(user.getId());
         fetchUserDTO.setEmail(user.getEmail());
-        fetchUserDTO.setUsername(user.getUsername());
+        fetchUserDTO.setName(user.getName());
         fetchUserDTO.setAddress(user.getAddress());
         fetchUserDTO.setAge(user.getAge());
         fetchUserDTO.setGender(user.getGender());
@@ -108,8 +108,7 @@ public class UserService {
     public UpdateUserDTO convertUpdateUserDTO(User user) {
         UpdateUserDTO updateUserDTO = new UpdateUserDTO();
         updateUserDTO.setId(user.getId());
-        updateUserDTO.setEmail(user.getEmail());
-        updateUserDTO.setUsername(user.getUsername());
+        updateUserDTO.setName(user.getName());
         updateUserDTO.setAddress(user.getAddress());
         updateUserDTO.setAge(user.getAge());
         updateUserDTO.setGender(user.getGender());

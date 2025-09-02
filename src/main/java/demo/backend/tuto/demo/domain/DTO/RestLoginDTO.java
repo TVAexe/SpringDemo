@@ -1,5 +1,7 @@
 package demo.backend.tuto.demo.domain.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,9 @@ import lombok.Setter;
 @Setter
 public class RestLoginDTO {
 
+    @JsonProperty("access_token")
     private String accessToken;
-    private UserLogin userLogin;
+    private UserLogin user;
 
     @Getter
     @Setter
@@ -19,7 +22,15 @@ public class RestLoginDTO {
     public static class UserLogin {
         private long id;
         private String email;
-        private String username;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserGetAccount {
+        private UserLogin user;
     }
 
 }
