@@ -3,8 +3,8 @@ package demo.backend.tuto.demo.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.backend.tuto.demo.domain.User;
-import demo.backend.tuto.demo.domain.DTO.ReqLoginDTO;
 import demo.backend.tuto.demo.domain.DTO.RestLoginDTO;
+import demo.backend.tuto.demo.domain.request.ReqLoginDTO;
 import demo.backend.tuto.demo.service.UserService;
 import jakarta.validation.Valid;
 

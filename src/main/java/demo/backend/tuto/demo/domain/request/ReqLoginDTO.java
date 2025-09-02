@@ -1,4 +1,4 @@
-package demo.backend.tuto.demo.domain.DTO;
+package demo.backend.tuto.demo.domain.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
