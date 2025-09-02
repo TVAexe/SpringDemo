@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import demo.backend.tuto.demo.domain.Company;
-import demo.backend.tuto.demo.domain.DTO.Meta;
 import demo.backend.tuto.demo.domain.DTO.ResultPaginationDTO;
 import demo.backend.tuto.demo.repository.CompanyRepository;
 
@@ -27,7 +26,7 @@ public class CompanyService {
     public ResultPaginationDTO handleGetAllCompanies(Specification<Company> spec, Pageable pageable) {
         Page<Company> pageCompany = this.companyRepository.findAll(spec, pageable);
         ResultPaginationDTO result = new ResultPaginationDTO();
-        Meta meta = new Meta();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());
         meta.setPages(pageCompany.getTotalPages());
