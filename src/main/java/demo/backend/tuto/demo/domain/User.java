@@ -11,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -26,7 +28,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
+
     private Long id;
     private String name;
     @NotBlank(message = "Email khong duoc de trong")
@@ -44,6 +46,10 @@ public class User {
     private String createdBy;
     private String updatedBy;
     private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @PrePersist
     public void handleCreate() {

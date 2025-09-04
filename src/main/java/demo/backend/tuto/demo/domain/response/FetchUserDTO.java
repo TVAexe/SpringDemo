@@ -21,4 +21,14 @@ public class FetchUserDTO {
     private GenderEnum gender;
     private Instant updatedAt;
     private Instant createdAt;
+    private CompanyUser company;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CompanyUser {
+        private long id;
+        private String name;
+    }
 }

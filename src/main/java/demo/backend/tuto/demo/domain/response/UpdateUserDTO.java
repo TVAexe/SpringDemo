@@ -16,4 +16,12 @@ public class UpdateUserDTO {
     private int age;
     private GenderEnum gender;
     private Instant updatedAt;
+    private CompanyUser company;
+
+    @Getter
+    @Setter
+    public static class CompanyUser {
+        private long id;
+        private String name;
+    }
 }
