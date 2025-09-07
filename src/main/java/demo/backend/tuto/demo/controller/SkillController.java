@@ -70,7 +70,7 @@ public class SkillController {
 
     @DeleteMapping("/skills/{id}")
     @ApiMessage("Delete a skill")
-    public ResponseEntity<Void> delete(@PathVariable Long id) throws IdInvalidException {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) throws IdInvalidException {
         Skill currentSkill = this.skillService.fetchSkillById(id);
         if (currentSkill == null) {
             throw new IdInvalidException("Skill id " + id + " not found");
