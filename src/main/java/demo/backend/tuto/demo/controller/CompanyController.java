@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -48,15 +50,25 @@ public class CompanyController {
     }
 
     @PutMapping("/companies")
+    @ApiMessage("Update company")
     public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company) {
         Company updatedCompany = this.companyService.handleUpdateCompany(company);
         return ResponseEntity.ok(updatedCompany);
     }
 
     @DeleteMapping("/companies/{id}")
+    @ApiMessage("Delete company by id")
     public ResponseEntity<Void> deleteCompany(@PathVariable("id") Long id) {
         this.companyService.handleDeleteCompany(id);
         return ResponseEntity.ok(null);
     }
+
+    @GetMapping("/companies/{id}")
+    @ApiMessage("Get company by id")
+    public ResponseEntity<Company> getCompany(@PathVariable("id") Long id) {
+        Company company = this.companyService.handleGetCompany(id);
+        return ResponseEntity.ok(company);
+    }
+
 
 }

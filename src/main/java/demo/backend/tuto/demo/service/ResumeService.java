@@ -84,6 +84,9 @@ public class ResumeService {
         resGetResumeDTO.setUpdatedAt(resume.getUpdatedAt());
         resGetResumeDTO.setCreatedBy(resume.getCreatedBy());
         resGetResumeDTO.setUpdatedBy(resume.getUpdatedBy());
+        if (resume.getJob() != null) {
+            resGetResumeDTO.setCompanyName(resume.getJob().getCompany().getName());
+        }
         resGetResumeDTO.setUser(new ResGetResumeDTO.UserResume(resume.getUser().getId(), resume.getUser().getName()));
         resGetResumeDTO.setJob(new ResGetResumeDTO.JobResume(resume.getJob().getId(), resume.getJob().getName()));
         return resGetResumeDTO;

@@ -43,7 +43,6 @@ public class JobController {
     @ApiMessage("Create new job")
     public ResponseEntity<ResCreatedJobDTO> create(@Valid @RequestBody Job job) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.createJob(job));
-    
     }
 
     @PutMapping("/jobs")
@@ -52,7 +51,7 @@ public class JobController {
         if (!currentJob.isPresent()) {
             throw new IdInvalidException("Job not found");
         }
-        return ResponseEntity.ok().body(this.jobService.update(job));
+        return ResponseEntity.ok().body(this.jobService.update(job,currentJob.get()));
     }
 
     @DeleteMapping("/jobs/{id}")
