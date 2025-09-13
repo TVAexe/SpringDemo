@@ -1,64 +1,42 @@
 package demo.backend.tuto.demo.domain;
 
-import java.time.Instant;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.Instant;
 
 import demo.backend.tuto.demo.utils.SecurityUtils;
-import demo.backend.tuto.demo.utils.constant.GenderEnum;
-import jakarta.persistence.Column;
+import demo.backend.tuto.demo.utils.constant.ResumeStateEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Setter;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "resumes")
 @Getter
 @Setter
-public class User {
-
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-    private String name;
-    @NotBlank(message = "Email khong duoc de trong")
-    private String email;
-    @NotBlank(message = "Password khong duoc de trong")
-    private String password;
 
-    private int age;
+    private String email;
+    private String url;
     @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
+    private ResumeStateEnum status;
+
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
-    private String address;
-
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Resume> resumes;
 
     @PrePersist
     public void handleCreate() {
@@ -76,4 +54,11 @@ public class User {
         this.updatedAt = Instant.now();
     }
 
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
