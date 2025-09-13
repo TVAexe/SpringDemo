@@ -19,5 +19,4 @@ public class RestResponse<T> {
     @Getter
     @Setter
     private T data;
-    
 }
