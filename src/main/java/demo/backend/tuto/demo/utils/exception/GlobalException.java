@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import demo.backend.tuto.demo.domain.response.RestResponse;
-import jakarta.persistence.NoResultException;
 
 @RestControllerAdvice
 public class GlobalException {
@@ -53,5 +52,16 @@ public class GlobalException {
         restResponse.setError(exception.getMessage());
         restResponse.setMessage("404 Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(restResponse);
+    }
+
+    @ExceptionHandler(value = {
+            StorageException.class
+    })
+    public ResponseEntity<RestResponse<Object>> handleUploadFileException(Exception exception) {
+        RestResponse<Object> restResponse = new RestResponse<Object>();
+        restResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        restResponse.setError(exception.getMessage());
+        restResponse.setMessage("Upload file error");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponse);
     }
 }
