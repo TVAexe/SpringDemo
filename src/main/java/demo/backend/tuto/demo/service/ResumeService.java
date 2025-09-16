@@ -4,10 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import com.turkraft.springfilter.converter.FilterSpecification;
+import com.turkraft.springfilter.converter.FilterSpecificationConverter;
+import com.turkraft.springfilter.parser.FilterParser;
+import com.turkraft.springfilter.parser.node.FilterNode;
 
 import demo.backend.tuto.demo.domain.Job;
 import demo.backend.tuto.demo.domain.Resume;
@@ -19,9 +25,16 @@ import demo.backend.tuto.demo.domain.response.resume.ResUpdateResumeDTO;
 import demo.backend.tuto.demo.repository.JobRepository;
 import demo.backend.tuto.demo.repository.ResumeRepository;
 import demo.backend.tuto.demo.repository.UserRepository;
+import demo.backend.tuto.demo.utils.SecurityUtils;
 
 @Service
 public class ResumeService {
+    @Autowired
+    private FilterParser filterParser;
+
+    @Autowired
+    private FilterSpecificationConverter filterSpecificationConverter;
+
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
@@ -107,6 +120,27 @@ public class ResumeService {
                 .collect(Collectors.toList());
         result.setResult(listResume);
         return result;
+    }
+
+    public ResultPaginationDTO fetchByUser(Pageable pageable) {
+        // TODO Auto-generated method stub
+        String email = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        FilterNode node = filterParser.parse("email='" + email + "'");
+        FilterSpecification<Resume> spec = filterSpecificationConverter.convert(node);
+        Page <Resume> resumes = this.resumeRepository.findAll(spec, pageable);
+        ResultPaginationDTO result = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
+        meta.setPages(resumes.getTotalPages());
+        meta.setTotal(resumes.getTotalElements());
+        result.setMeta(meta);
+        List<ResGetResumeDTO> listResume = resumes.getContent()
+                .stream().map(item -> this.getResume(item))
+                .collect(Collectors.toList());
+        result.setResult(listResume);
+        return result;
+
     }
 
 }

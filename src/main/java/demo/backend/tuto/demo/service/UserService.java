@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import demo.backend.tuto.demo.domain.Company;
+import demo.backend.tuto.demo.domain.Role;
 import demo.backend.tuto.demo.domain.User;
 import demo.backend.tuto.demo.domain.response.CreatedUserDTO;
 import demo.backend.tuto.demo.domain.response.FetchUserDTO;
@@ -22,10 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CompanyService companyService;
+    private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, CompanyService companyService) {
+    public UserService(UserRepository userRepository, CompanyService companyService, RoleService roleService) {
         this.userRepository = userRepository;
         this.companyService = companyService;
+        this.roleService = roleService;
     }
 
     public User handleCreateUser(User user) {
@@ -35,6 +38,14 @@ public class UserService {
                 user.setCompany(companyOptional);
             } else {
                 user.setCompany(null);
+            }
+        }
+        if (user.getRole() != null) {
+            Role role = this.roleService.fetchById(user.getRole().getId());
+            if (role != null) {
+                user.setRole(role);
+            } else {
+                user.setRole(null);
             }
         }
         return this.userRepository.save(user);
@@ -62,20 +73,7 @@ public class UserService {
         meta.setTotal(pageUser.getTotalElements());
         result.setMeta(meta);
         List<FetchUserDTO> fetchUserDTOs = pageUser.getContent().stream()
-    .map(item -> new FetchUserDTO(
-        item.getId(),
-        item.getName(),
-        item.getEmail(),
-        item.getAddress(),
-        item.getAge(),
-        item.getGender(),
-        item.getUpdatedAt(),
-        item.getCreatedAt(),
-        new FetchUserDTO.CompanyUser(
-            (item.getCompany() != null ? item.getCompany().getId() : 0),
-            (item.getCompany() != null ? item.getCompany().getName() : null)
-        )
-    ))
+    .map(item -> this.convertFetchUserDTO(item))
     .collect(Collectors.toList());
         result.setResult(fetchUserDTOs);
         return result;
@@ -99,6 +97,17 @@ public class UserService {
             } else {
                 currentUser.setCompany(null);
             }
+
+            if (user.getRole() != null) {
+                Role role = this.roleService.fetchById(user.getRole().getId());
+                if (role != null) {
+                    currentUser.setRole(role);
+                } else {
+                    currentUser.setRole(null);
+                }
+            } else {
+                currentUser.setRole(null);
+            }
             currentUser = this.userRepository.save(currentUser);
         }
         return currentUser;
@@ -115,6 +124,7 @@ public class UserService {
     public CreatedUserDTO convertUserDTO(User newUser) {
         CreatedUserDTO createdUserDTO = new CreatedUserDTO();
         CreatedUserDTO.CompanyUser companyUser = new CreatedUserDTO.CompanyUser();
+        CreatedUserDTO.RoleUser roleUser = new CreatedUserDTO.RoleUser();
         createdUserDTO.setId(newUser.getId());
         createdUserDTO.setEmail(newUser.getEmail());
         createdUserDTO.setName(newUser.getName());
@@ -126,6 +136,12 @@ public class UserService {
             companyUser.setId(newUser.getCompany().getId());
             companyUser.setName(newUser.getCompany().getName());
             createdUserDTO.setCompany(companyUser);
+        }
+
+        if (newUser.getRole() != null) {
+            roleUser.setId(newUser.getRole().getId());
+            roleUser.setName(newUser.getRole().getName());
+            createdUserDTO.setRole(roleUser);
         }
         return createdUserDTO;
     }

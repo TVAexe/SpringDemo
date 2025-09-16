@@ -56,9 +56,9 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         RestLoginDTO restLoginDTO = new RestLoginDTO();
         User userDB = userService.findUserByUsername(loginDTO.getUsername());
-        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(userDB.getId(), userDB.getEmail(), userDB.getName());
+        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(userDB.getId(), userDB.getEmail(), userDB.getName(), userDB.getRole());
         restLoginDTO.setUser(userLogin);
-        String accessToken = this.securityUtils.createAccessToken(authentication.getName(), restLoginDTO.getUser());
+        String accessToken = this.securityUtils.createAccessToken(authentication.getName(), restLoginDTO);
         restLoginDTO.setAccessToken(accessToken);
         String refreshToken = this.securityUtils.createRefreshToken(userDB.getEmail(), restLoginDTO);
         this.userService.updateUserToken(refreshToken, userDB.getEmail());
@@ -72,7 +72,7 @@ public class AuthController {
     public ResponseEntity<RestLoginDTO.UserGetAccount> getAccount() {
         String email = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
         User userDB = userService.findUserByUsername(email);
-        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(userDB.getId(), userDB.getEmail(), userDB.getName());
+        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(userDB.getId(), userDB.getEmail(), userDB.getName(), userDB.getRole());
         RestLoginDTO.UserGetAccount userGetAccount = new RestLoginDTO.UserGetAccount(userLogin);
         return ResponseEntity.ok().body(userGetAccount);
     }
@@ -91,9 +91,9 @@ public class AuthController {
         }
         RestLoginDTO restLoginDTO = new RestLoginDTO();
         User userDB = userService.findUserByUsername(email);
-        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(userDB.getId(), userDB.getEmail(), userDB.getName());
+        RestLoginDTO.UserLogin userLogin = new RestLoginDTO.UserLogin(userDB.getId(), userDB.getEmail(), userDB.getName(), userDB.getRole());
         restLoginDTO.setUser(userLogin);
-        String accessToken = this.securityUtils.createAccessToken(email, restLoginDTO.getUser());
+        String accessToken = this.securityUtils.createAccessToken(email, restLoginDTO);
         restLoginDTO.setAccessToken(accessToken);
         String newRefreshToken = this.securityUtils.createRefreshToken(email, restLoginDTO);
         this.userService.updateUserToken(newRefreshToken, email);

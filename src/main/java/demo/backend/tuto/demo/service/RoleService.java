@@ -2,6 +2,7 @@ package demo.backend.tuto.demo.service;
 
 import demo.backend.tuto.demo.domain.Permission;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -38,7 +39,11 @@ public class RoleService {
     }
 
     public Role fetchById(Long id) {
-        return this.roleRepository.findById(id).orElse(null);
+        Optional<Role> role = this.roleRepository.findById(id);
+        if (role.isPresent()) {
+            return role.get();
+        }
+        return null;
     }
 
     public Role update(Role role) {

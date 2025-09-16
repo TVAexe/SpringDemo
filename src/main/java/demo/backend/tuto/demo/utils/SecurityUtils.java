@@ -50,7 +50,11 @@ public class SecurityUtils {
     @Value("${demo.jwt.refresh-token-validity-in-seconds}")
     private Long jwtRefreshTokenValidity;
 
-    public String createAccessToken(String email, RestLoginDTO.UserLogin user) {
+    public String createAccessToken(String email, RestLoginDTO user) {
+        RestLoginDTO.UserInsideToken userInsideToken = new RestLoginDTO.UserInsideToken();
+        userInsideToken.setId(user.getUser().getId());
+        userInsideToken.setEmail(user.getUser().getEmail());
+        userInsideToken.setName(user.getUser().getName());
         Instant now = Instant.now();
         Instant validity = now.plus(this.jwtAccessTokenValidity, ChronoUnit.SECONDS);
         List<String> listAuthority = new ArrayList<String>();
@@ -61,7 +65,7 @@ public class SecurityUtils {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("User", user)
+                .claim("User", userInsideToken)
                 .claim("permission", listAuthority)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -72,11 +76,15 @@ public class SecurityUtils {
         Instant now = Instant.now();
         Instant validity = now.plus(this.jwtRefreshTokenValidity, ChronoUnit.SECONDS);
 
+        RestLoginDTO.UserInsideToken userInsideToken = new RestLoginDTO.UserInsideToken();
+        userInsideToken.setId(restLoginDTO.getUser().getId());
+        userInsideToken.setEmail(restLoginDTO.getUser().getEmail());
+        userInsideToken.setName(restLoginDTO.getUser().getName());
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", restLoginDTO.getUser())
+                .claim("user", userInsideToken)
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

@@ -60,6 +60,10 @@ public class User {
     @JsonIgnore
     private List<Resume> resumes;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     @PrePersist
     public void handleCreate() {
         this.createdBy = SecurityUtils.getCurrentUserLogin().isPresent() == true
