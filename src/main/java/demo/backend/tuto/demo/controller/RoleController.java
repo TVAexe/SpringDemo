@@ -52,7 +52,7 @@ public class RoleController {
         // if (this.roleService.existByName(role)) {
         //     throw new IdInvalidException("Role with name" + role.getName() + " already exists");
         // }
-        return ResponseEntity.ok(this.roleService.update(role));
+        return ResponseEntity.ok().body(this.roleService.update(role));
     }
 
     @DeleteMapping("/roles/{id}")
