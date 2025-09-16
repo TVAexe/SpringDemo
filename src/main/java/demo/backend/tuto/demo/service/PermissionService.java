@@ -61,7 +61,6 @@ public class PermissionService {
     }
 
     public ResultPaginationDTO getAllPermissions(Specification<Permission> spec, Pageable pageable) {
-        // TODO Auto-generated method stub
         Page<Permission> pagePermissions = this.permissionRepository.findAll(spec, pageable);
         ResultPaginationDTO result = new ResultPaginationDTO();
         ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
@@ -72,5 +71,13 @@ public class PermissionService {
         result.setMeta(meta);
         result.setResult(pagePermissions.getContent());
         return result;
+    }
+
+    public boolean isSameName(Permission permission) {
+        Permission existingPermission = this.fetchById(permission.getId());
+        if (existingPermission != null) {
+            return existingPermission.getName().equals(permission.getName());
+        }
+        return false;
     }
 }

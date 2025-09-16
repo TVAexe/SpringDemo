@@ -123,7 +123,6 @@ public class ResumeService {
     }
 
     public ResultPaginationDTO fetchByUser(Pageable pageable) {
-        // TODO Auto-generated method stub
         String email = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
         FilterNode node = filterParser.parse("email='" + email + "'");
         FilterSpecification<Resume> spec = filterSpecificationConverter.convert(node);
